@@ -8,10 +8,18 @@ def make_hz_videos(width, height, hz, file_name):
         file_name + "_video.avi", cv2.VideoWriter_fourcc(*"DIVX"), hz * 2, frameSize
     )
 
-    """ mp4
+    """ 
+    
+    mp4:
     out_put = cv2.VideoWriter(
         file_name + "_video.mp4", cv2.VideoWriter_fourcc(*'mp4v'), hz * 2, frameSize
     )
+    
+    mov:
+    out_put = cv2.VideoWriter(
+        file_name + "_video.mov", cv2.VideoWriter_fourcc(*'mp4v'), hz * 2, frameSize
+    )
+    
     """
 
     black_img = cv2.resize(cv2.imread(black_img_path), frameSize)
