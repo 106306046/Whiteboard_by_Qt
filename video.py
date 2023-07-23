@@ -8,7 +8,7 @@ def make_hz_videos(width, height, hz, file_name):
         file_name + "_video.avi", cv2.VideoWriter_fourcc(*"DIVX"), hz * 2, frameSize
     )
 
-    """ mp4 file
+    """ mp4
     out_put = cv2.VideoWriter(
         file_name + "_video.mp4", cv2.VideoWriter_fourcc(*'mp4v'), hz * 2, frameSize
     )
@@ -24,3 +24,12 @@ def make_hz_videos(width, height, hz, file_name):
             out_put.write(img)
 
     out_put.release()
+
+
+"""example
+
+from video import make_hz_videos
+
+make_hz_videos(150, 150, 60, "eraser")
+
+"""
