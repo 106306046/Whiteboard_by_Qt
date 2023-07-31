@@ -1,6 +1,8 @@
 from PySide6 import QtWidgets
 from PySide6.QtGui import *
 from PySide6.QtCore import *
+from PySide6.QtMultimedia import QMediaPlayer
+from PySide6.QtMultimediaWidgets import QVideoWidget
 import sys
 
 
@@ -144,10 +146,11 @@ class MyWidget(QtWidgets.QWidget):
         )
         self.colorBtn4.clicked.connect(lambda: self.setColor(self.color_dict["yellow"]))
 
-        self.confirmBtn = QtWidgets.QPushButton(self)
+        self.confirmBtn = QtWidgets.QPushButton(self, "Confirm")
         self.confirmBtn.setStyleSheet(
             """
                 QPushButton{
+                    font-color: #000000;
                     background: #ffffff;
                 }
                 """
