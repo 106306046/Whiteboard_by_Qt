@@ -80,7 +80,7 @@ class MyWidget(QtWidgets.QWidget):
 
         self.eraser_btn = self.hz_img(
             "img/eraser",
-            hz=60,
+            hz=6,
             x=(65 + btn_width * 1 + btn_gap),
             y=65,
             w=btn_width,
@@ -226,9 +226,9 @@ class MyWidget(QtWidgets.QWidget):
         pass
 
     def hz_img(self, img_path, hz, x, y, w=150, h=150):
-        make_hz_videos(w, h, hz, img_path)
+        video = make_hz_videos(w, h, hz, img_path)
         player = QMediaPlayer(self)
-        player.setSource(QUrl(img_path + "_video.mp4"))
+        player.setSource(QUrl(img_path + "_video_" + str(hz) + ".mp4"))
         videoWidget = QVideoWidget(self)
         videoWidget.setGeometry(x, y, w, h)
         player.setVideoOutput(videoWidget)

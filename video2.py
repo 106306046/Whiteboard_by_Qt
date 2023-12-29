@@ -5,7 +5,7 @@ def make_hz_videos(width, height, hz, file_name):
     black_img_path = "img/black.png"
     frameSize = (width, height)
     out_put = cv2.VideoWriter(
-        file_name + "_video.mp4", cv2.VideoWriter_fourcc(*"avc1"), hz * 2, frameSize
+        file_name + "_video_" + str(hz) + ".mp4", cv2.VideoWriter_fourcc(*"avc1"), hz * 2, frameSize
     )
 
     black_img = cv2.resize(cv2.imread(black_img_path), frameSize)
