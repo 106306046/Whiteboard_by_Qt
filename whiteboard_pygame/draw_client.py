@@ -1,4 +1,4 @@
-from mne_realtime import StimClient
+# from mne_realtime import StimClient
 import time
 
 import sys
@@ -58,7 +58,7 @@ def run():
         ),
         time=current_time,
         target_f=6,  # target frequency
-        img=pygame.image.load(path / 'icons' / 'back.png'),
+        img=pygame.image.load(path/'whiteboard_pygame'/'icons'/'back.png'),
     )
     button_next = Button(
         name="Next Button",
@@ -71,7 +71,7 @@ def run():
         ),
         time=current_time,
         target_f=7,  # target frequency
-        img=pygame.image.load(path / 'icons' / 'next.png'),
+        img=pygame.image.load(path / 'whiteboard_pygame' / 'icons' / 'next.png'),
     )
     button_comfirm = Button(
         name="Confirm Button",
@@ -172,7 +172,9 @@ def run():
 # stim_client = StimClient('localhost', port=4218)
 # stim_duration = 10.0
 
-executor = ThreadPoolExecutor()
-e1 = executor.submit(run)
+# executor = ThreadPoolExecutor()
+# e1 = executor.submit(run)
 # e2 = executor.submit(receiver)
-executor.shutdown()
+# executor.shutdown()
+
+run()
