@@ -17,7 +17,7 @@ input = 0
 
 def run():
     global input
-    path = Path()
+    path = Path('./whiteboard_pygame')
     # pygame initialize
     pygame.init()
 
@@ -58,7 +58,7 @@ def run():
         ),
         time=current_time,
         target_f=6,  # target frequency
-        img=pygame.image.load(path/'whiteboard_pygame'/'icons'/'back.png'),
+        img=pygame.image.load(path / 'icons'/'back.png'),
     )
     button_next = Button(
         name="Next Button",
@@ -71,7 +71,7 @@ def run():
         ),
         time=current_time,
         target_f=7,  # target frequency
-        img=pygame.image.load(path / 'whiteboard_pygame' / 'icons' / 'next.png'),
+        img=pygame.image.load(path / 'icons' / 'next.png'),
     )
     button_comfirm = Button(
         name="Confirm Button",
@@ -157,8 +157,8 @@ def run():
         # button_back.observe()     # Uncomment to observe actual frequency of button
         pygame.display.update()
 
-    print("Ended" + " " * 100)
-    pygame.quit()
+    # print("Ended" + " " * 100)
+    # pygame.quit()
 
 #predict value from the sever
 # def receiver():
