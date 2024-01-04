@@ -2,7 +2,7 @@
 
 import numpy as np
 from datetime import datetime
-
+import os
 import sys
 import pygame
 from pygame import Surface, time
@@ -12,6 +12,9 @@ from pathlib import Path
 # --- path ---
 
 path = Path('./P2_20231117')
+
+OUTPUT_FOLDER_PATH = path / 'outputimg'
+OUTPUT_LIST = []
 
 # --- constants ---
 
@@ -125,6 +128,7 @@ class Canvas():
         str_path = str(path)
         name = str_path + "/saveimg/paint_" + time_string + ".png"
         pygame.image.save(self.canvas, name)
+        OUTPUT_LIST.append("paint_" + time_string + ".png")
         return name
 
     def load(self,image_path):
@@ -148,11 +152,14 @@ MARGIN1 = 10
 MARGIN2 = 10
 BRUSH_COLOR = BLACK
 
+CANVAS_W = WIDTH - MARGIN1 * 3 - W1 #1000 - 10*2 -200 = 780
+CANVAS_H =  HEIGHT - MARGIN1 * 2 # 600 - 10 *2 = 580
+
 start_point = 600, 300
 mouse = start_point[:]
 
 pygame.display.set_caption(CAPTION)
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+screen = pygame.display.set_mode((WIDTH+ CANVAS_W + MARGIN1, HEIGHT))
 
 # build objects
 canvas = Canvas(
@@ -160,13 +167,15 @@ canvas = Canvas(
     rect=(
         MARGIN1 * 2 + W1,  # x coordinate
         MARGIN1,  # y coordinate
-        WIDTH - MARGIN1 * 3 - W1,  # width
-        HEIGHT - MARGIN1 * 2  # height
+        CANVAS_W,  # width
+        CANVAS_H  # height
     )
 )
 
-current_time = pygame.time.get_ticks()
+ai_generated_image = pygame.image.load(str(path)+'/outputimg/default.png').convert()
+ai_generated_image_positon = (MARGIN1 * 2 + W1 + CANVAS_W + MARGIN1,MARGIN1)
 
+current_time = pygame.time.get_ticks()
 
 button_A = Button(
     name="Undo/Redo",
@@ -254,13 +263,14 @@ move_step = 10
 mode = 'menu'
 pencil_color = BLACK
 last2save = ["",""]
-newsave = canvas.save()
+newsave = ["",""]
 last2save = [last2save[1], newsave]
 
 
 #standby mode:
 screen.fill(BACKGROUND_COLOR)
 canvas.draw(screen)
+screen.blit(ai_generated_image,ai_generated_image_positon)
 for button in button_list:
     button.show = True
     button.draw(screen)
@@ -275,6 +285,13 @@ while standby:
 
 #start drawing
 while running:
+    # check ai generate image
+    if(os.path.isfile( str(OUTPUT_FOLDER_PATH / OUTPUT_LIST[0]) )):
+        OUTPUT_LIST.pop(0)
+        ai_generated_image = pygame.image.load(OUTPUT_FOLDER_PATH / OUTPUT_LIST[0]).convert()
+        screen.blit(ai_generated_image,ai_generated_image_positon)
+    
+
     # clock.tick(fps)
 
     #read the predict order
@@ -441,37 +458,37 @@ while running:
                 continue
                 #TODO
 
-            elif mode == 'rectangle':
-                # EEG-mouse control system
-                if SSVEP_input == 'E':  # END
-                    temp_rect = [min(rect_first_pt[0], mouse[0]), min(rect_first_pt[1], mouse[1]),
-                                 max(abs(rect_first_pt[0] - mouse[0]), 1), max(abs(rect_first_pt[1] - mouse[1]), 1)]
-                    canvas.add_rect(BLACK,temp_rect,4)
-                    mode = 'menu'
-                elif MI_input == 'Right':
-                    mouse = mouse[0] + move_step, mouse[1]
-                elif MI_input == 'Left':
-                    mouse = mouse[0] - move_step, mouse[1]
-                elif MI_input == 'Down':
-                    mouse = mouse[0], mouse[1] + move_step
-                elif MI_input == 'Up':
-                    mouse = mouse[0], mouse[1] - move_step
+            # elif mode == 'rectangle':
+            #     # EEG-mouse control system
+            #     if SSVEP_input == 'E':  # END
+            #         temp_rect = [min(rect_first_pt[0], mouse[0]), min(rect_first_pt[1], mouse[1]),
+            #                      max(abs(rect_first_pt[0] - mouse[0]), 1), max(abs(rect_first_pt[1] - mouse[1]), 1)]
+            #         canvas.add_rect(BLACK,temp_rect,4)
+            #         mode = 'menu'
+            #     elif MI_input == 'Right':
+            #         mouse = mouse[0] + move_step, mouse[1]
+            #     elif MI_input == 'Left':
+            #         mouse = mouse[0] - move_step, mouse[1]
+            #     elif MI_input == 'Down':
+            #         mouse = mouse[0], mouse[1] + move_step
+            #     elif MI_input == 'Up':
+            #         mouse = mouse[0], mouse[1] - move_step
 
-            elif mode == 'circle':
-                # EEG-mouse control system
-                if SSVEP_input == 'E':  # END
-                    temp_rect = [min(rect_first_pt[0], mouse[0]), min(rect_first_pt[1], mouse[1]),
-                                 max(abs(rect_first_pt[0] - mouse[0]), 1), max(abs(rect_first_pt[1] - mouse[1]), 1)]
-                    canvas.add_circle(BLACK,temp_rect,4)
-                    mode = 'menu'
-                elif MI_input == 'Right':
-                    mouse = mouse[0] + move_step, mouse[1]
-                elif MI_input == 'Left':
-                    mouse = mouse[0] - move_step, mouse[1]
-                elif MI_input == 'Down':
-                    mouse = mouse[0], mouse[1] + move_step
-                elif MI_input == 'Up':
-                    mouse = mouse[0], mouse[1] - move_step
+            # elif mode == 'circle':
+            #     # EEG-mouse control system
+            #     if SSVEP_input == 'E':  # END
+            #         temp_rect = [min(rect_first_pt[0], mouse[0]), min(rect_first_pt[1], mouse[1]),
+            #                      max(abs(rect_first_pt[0] - mouse[0]), 1), max(abs(rect_first_pt[1] - mouse[1]), 1)]
+            #         canvas.add_circle(BLACK,temp_rect,4)
+            #         mode = 'menu'
+            #     elif MI_input == 'Right':
+            #         mouse = mouse[0] + move_step, mouse[1]
+            #     elif MI_input == 'Left':
+            #         mouse = mouse[0] - move_step, mouse[1]
+            #     elif MI_input == 'Down':
+            #         mouse = mouse[0], mouse[1] + move_step
+            #     elif MI_input == 'Up':
+            #         mouse = mouse[0], mouse[1] - move_step
 
 
     # Aux func: not control by EEG
@@ -480,17 +497,17 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        elif event.type == pygame.VIDEORESIZE:
-            print("The Pygame window is now " + str(event.w) + " pixels wide and " + str(event.h) + " pixels high")
-            WIDTH, HEIGHT = event.size
-            if WIDTH < min_width:
-                WIDTH = min_width
-            if HEIGHT < min_height:
-                HEIGHT = min_height
-            screen = pygame.display.set_mode((WIDTH, HEIGHT), HWSURFACE | DOUBLEBUF | RESIZABLE)
-            CANVAS_SIZE = (WIDTH - MARGIN1 * 2) / 2, HEIGHT - MARGIN1 * 2
-            screen.fill(BACKGROUND_COLOR)
-            canvas = pygame.transform.scale(canvas, CANVAS_SIZE)
+        # elif event.type == pygame.VIDEORESIZE:
+        #     print("The Pygame window is now " + str(event.w) + " pixels wide and " + str(event.h) + " pixels high")
+        #     WIDTH, HEIGHT = event.size
+        #     if WIDTH < min_width:
+        #         WIDTH = min_width
+        #     if HEIGHT < min_height:
+        #         HEIGHT = min_height
+        #     screen = pygame.display.set_mode((WIDTH, HEIGHT), HWSURFACE | DOUBLEBUF | RESIZABLE)
+        #     CANVAS_SIZE = (WIDTH - MARGIN1 * 2) / 2, HEIGHT - MARGIN1 * 2
+        #     screen.fill(BACKGROUND_COLOR)
+        #     canvas = pygame.transform.scale(canvas, CANVAS_SIZE)
         elif event.type == pygame.KEYDOWN:
             # Save canvas when "S" is pressed
             if event.key == pygame.K_s:
@@ -527,14 +544,15 @@ while running:
 
 
     ## mouse in control bar
-    if pygame.mouse.get_pressed()[0]:
-        mouse_pos = pygame.mouse.get_pos()
-        if canvas.get_rect().collidepoint(mouse_pos):
-            canvas.add_brush(
-                color=BRUSH_COLOR,
-                position=mouse_pos,
-                size=10
-            )
+    # if pygame.mouse.get_pressed()[0]:
+    #     mouse_pos = pygame.mouse.get_pos()
+    #     if canvas.get_rect().collidepoint(mouse_pos):
+    #         canvas.add_brush(
+    #             color=BRUSH_COLOR,
+    #             position=mouse_pos,
+    #             size=10
+    #         )
+                        
     ## mouse in canvas
     if pygame.mouse.get_pressed()[0]:
         mouse_pos = pygame.mouse.get_pos()
@@ -544,8 +562,6 @@ while running:
                 position=mouse_pos,
                 size=10
             )
-
-
 
     # --- SSVEP control system ---
     if in_menu == True:
@@ -593,7 +609,6 @@ while running:
                     max(abs(first_pt[0]-mouse[0]),1), max(abs(first_pt[1]-mouse[1]),1)]
         pygame.draw.ellipse(screen, RED, temp_rect, 4)
         """
-
 
     pygame.display.update()
 
