@@ -2,6 +2,7 @@ from pathlib import Path
 import os
 from PIL import Image
 import io
+import re
 from io import BytesIO
 import base64
 import requests
@@ -26,6 +27,13 @@ def return_img_base64(img):
     img_base64 = base64.b64encode(img_byte_array.getvalue()).decode('utf-8')
     return img_base64
 
+def base64_to_image(base64_str):
+    base64_data = re.sub('^data:image/.+;base64,', '', base64_str)
+    byte_data = base64.b64decode(base64_data)
+    image_data = BytesIO(byte_data)
+    img = Image.open(image_data)
+    return img
+
 while True:
 
     current_folder_status = os.listdir( OBSERVE_FOLDER_PATH )
@@ -46,9 +54,10 @@ while True:
             }
             
             request = requests.post( DOMAIN, json = payload_dct )
+            base64_img = request['base64_image']
+            output_img = base64_to_image(base64_img)
 
-            request_image = Image.open(BytesIO(base64.b64decode(request['base64_image'])))
-            request.save(str(OUTPUT_FOLDER_PATH / file ))
+            output_img.save(str(OUTPUT_FOLDER_PATH / file ))
 
         # update OBSERVE_FOLDER_STATUS
         OBSERVE_FOLDER_STATUS = current_folder_status
