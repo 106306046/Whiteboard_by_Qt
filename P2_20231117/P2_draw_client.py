@@ -630,6 +630,5 @@ def main():
 
     print("Ended" + " " * 100)
     pygame.quit()
-    return
 
 # main()
