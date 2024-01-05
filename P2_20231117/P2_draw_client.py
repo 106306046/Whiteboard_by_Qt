@@ -286,11 +286,12 @@ while standby:
 #start drawing
 while running:
     # check ai generate image
-    if(os.path.isfile( str(OUTPUT_FOLDER_PATH / OUTPUT_LIST[0]) )):
-        OUTPUT_LIST.pop(0)
-        ai_generated_image = pygame.image.load(OUTPUT_FOLDER_PATH / OUTPUT_LIST[0]).convert()
-        screen.blit(ai_generated_image,ai_generated_image_positon)
-    
+    if(len(OUTPUT_LIST) != 0):
+        if(os.path.isfile( str(OUTPUT_FOLDER_PATH / OUTPUT_LIST[0]) )):
+            OUTPUT_LIST.pop(0)
+            ai_generated_image = pygame.image.load(OUTPUT_FOLDER_PATH / OUTPUT_LIST[0]).convert()
+            screen.blit(ai_generated_image,ai_generated_image_positon)
+        
 
     # clock.tick(fps)
 
