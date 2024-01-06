@@ -23,8 +23,10 @@ def main():
 
     path = Path('./P2_20231117')
 
+    # --- AI --- 
     OUTPUT_FOLDER_PATH = path / 'outputimg'
     OUTPUT_LIST = []
+    DONE_OUTPUT_LIST = []
 
     # --- constants ---
 
@@ -301,7 +303,7 @@ def main():
         if(len(OUTPUT_LIST) != 0):
             if(os.path.isfile(str(OUTPUT_FOLDER_PATH / OUTPUT_LIST[0])) and not has_handle(str(OUTPUT_FOLDER_PATH / OUTPUT_LIST[0]))):
                 ai_generated_image = pygame.image.load(OUTPUT_FOLDER_PATH / OUTPUT_LIST[0]).convert()
-                OUTPUT_LIST.pop(0)
+                DONE_OUTPUT_LIST.append(OUTPUT_LIST.pop(0))
             
             
 
